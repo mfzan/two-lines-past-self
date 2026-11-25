@@ -21,8 +21,15 @@ OUTPUT_PATH = "/output/entry.txt"
 
 def main() -> int:
     """Write the two entry lines and make the file world-readable."""
+    lines = [LINE_ONE, LINE_TWO]
+    # Guard the gate before writing: exactly two lines, one sentence
+    # each, and the whole entry within the 280-character limit.
+    if len(lines) != 2 or any(not line.strip() for line in lines):
+        return 1
+    text = "\n".join(lines) + "\n"
+    if len(text.rstrip("\n")) > 280:
+        return 1
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
-    text = LINE_ONE + "\n" + LINE_TWO + "\n"
     with open(OUTPUT_PATH, "w", encoding="utf-8") as handle:
         handle.write(text)
     # The grader collects outputs as another user, so the file itself
